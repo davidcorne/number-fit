@@ -1,15 +1,34 @@
 class Grid {
+    #grid
+
     constructor(width, height) {
         this.width = width
         this.height = height
-        this.grid = []
+        this.#grid = Array(this.width * this.height)
     }
 
+    initialise(gridContents) {
+        if (gridContents.length !== this.#grid.length) {
+            //TODO error
+        }
+        for (let index = 0; index < gridContents.length; ++index) {
+            const character = gridContents[index]
+            if (!character.match(/[0-9#]/)) {
+                //TODO error
+            }
+            this.#grid[index] = new Cell(character)
+        }
+    }
+
+    cell(x, y) {
+        const index = (this.width * x) + y
+        return this.#grid[index]
+    }
+    
 }
 
 class Cell {
     constructor(contents) {
-        if (contents )
         this.contents = contents
         this.revealed = false
     }
@@ -30,14 +49,15 @@ class Cell {
  * @returns {Grid} The grid with the contents from the string
  */
 const gridFromString = function(encodedGrid) {
-    const parser = /([0-9]+),([0-9]+),([0-9#]+)/
+    const parser = /(?<width>[0-9]+),(?<height>[0-9]+),(?<content>[0-9#]+)/
     const match = encodedGrid.match(parser)
     if (!match) {
         //TODO error
     }
-    const width = parseInt(match[1])
-    const height = parseInt(match[2])
-    const contents = match[3]
+    const width = parseInt(match.groups.width)
+    const height = parseInt(match.groups.height)
+    const content = match.groups.content
     const grid = new Grid(width, height)
+    grid.initialise(content)
     return grid
 }
