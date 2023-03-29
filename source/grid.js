@@ -42,15 +42,36 @@ class Grid {
     }
 
     cell(x, y) {
-        const index = (this.width * x) + y
+        const index = x + (y * this.width)
         return this.#grid[index]
     }
     
+    toString() {
+        const lines = []
+        for (let y = 0; y < this.height; ++y) {
+            const line = ["|"]
+            for (let x = 0; x < this.width; ++x) {
+                line.push(this.cell(x, y))
+                line.push(" ")
+            }
+            // Remove the last " "
+            line.pop()
+            line.push("|")
+            lines.push(line.join(""))
+        }
+        return lines.join("\n")
+    }
 }
 
 class Cell {
-    constructor(contents) {
-        this.contents = contents
+    constructor(content) {
+        this.content = content
         this.revealed = false
     }
+
+    toString() {
+        return this.content
+    }
 }
+
+module.exports.Grid = Grid
