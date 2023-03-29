@@ -1,0 +1,15 @@
+{
+  "name": "number-fit",
+  "version": "1.0.0",
+  "description": "A repo for creating and displaying number-fit puzzles.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha source/utest.js"
+  },
+  "author": "David Corne",
+  "license": "MIT",
+  "dependencies": {
+    "mocha": "^10.2.0",
+    "rewire": "^6.0.0"
+  }
+}
