@@ -1,3 +1,19 @@
+/**
+ * Counts the number of occurances of element in array
+ * 
+ * @param {Array} array The array to count occurances
+ * @param {any} elementToFind The element to count occurances in
+ */
+const occurances = function(array, elementToFind) {
+    let count = 0
+    for (const element of array) {
+        if (element === elementToFind) {
+            ++count
+        }
+    }
+    return count
+}
+
 class Grid {
     #grid
 
@@ -44,6 +60,22 @@ class Grid {
         return grid
     }
 
+    static random(width, height) {
+        // Algorithm
+        // 1. Make a correctly sized array
+        // 2. Fill it with 40% blank spaces
+        // 3. Move the spaces around so that the shape of the grid is right
+        // 4. Fill it with random numbers
+        // 5. Create the grid and return it
+
+        // 1. Make a correctly sized array
+        const total = width * height
+        const contentArray = Array(total)
+
+        // 2. Fill it with 40% blank spaces
+        const blanks = parseInt(total * 0.4)
+    }
+    
     cell(x, y) {
         const index = x + (y * this.width)
         return this.#grid[index]
