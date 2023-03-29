@@ -33,6 +33,36 @@ const randomDigit = function() {
     return randomIndex(10)
 }
 
+const isolatedCells = function(grid) {
+    const cells = []
+    for (let y = 0; y < grid.height; ++y) {
+        for (let x = 0; x < grid.width; ++x) {
+            // Don't worry if we're not fillable
+            if (!grid.cell(x, y).fillable()) {
+                continue
+            }
+            const neighbours = grid.neighbours(x, y)
+            const isNotFillable = (cell) => {
+                return !cell.fillable()
+            }
+            if (neighbours.every(isNotFillable)) {
+                cells.push([x, y])
+            }
+        }
+    }
+    return cells
+}
+
+const removeIsolatedCells = function(grid) {
+    const isolated = isolatedCells(grid)
+    for (const cell of isolated) {
+        // Get the neighbours of the isolated cells, randomly change one of them to a digit
+        const neighbours = grid.neighbours(cell[0], cell[1])
+        const index = randomIndex(neighbours.length)
+        neighbours[index].content = randomDigit()
+    }
+}
+
 class Grid {
     #grid
 
@@ -83,9 +113,10 @@ class Grid {
         // Algorithm
         // 1. Make a correctly sized array
         // 2. Fill it with 40% blank spaces
-        // 3. Move the spaces around so that the shape of the grid is right
-        // 4. Fill it with random numbers
-        // 5. Create the grid and return it
+        // 3. Fill it with random numbers
+        // 4. Create the grid
+        // 5. Move the spaces around so that the shape of the grid is right
+        // 6. Return it
 
         // 1. Make a correctly sized array
         const total = width * height
@@ -98,16 +129,13 @@ class Grid {
             contentArray[index] = "#"
         }
 
-        // 3. Move the spaces around so that the shape of the grid is right
-        //TODO not sure how to do this yet
-
-        // 4. Fill it with random numbers
+        // 3. Fill it with random numbers
         for (let i = 0; i < total; ++i) {
             if (contentArray[i] !== "#") {
                 contentArray[i] = randomDigit()
             }
         }
-        // 5. Create the grid and return it
+        // 4. Create the grid
         const encodedString = [
             width.toString(),
             ",",
@@ -115,7 +143,14 @@ class Grid {
             ",",
             contentArray.join("")
         ]
-        return this.fromString(encodedString.join(""))
+        const grid = this.fromString(encodedString.join(""))
+        // 5. Move the spaces around so that the shape of the grid is right
+        // 5.1 Remove any isolated numbers. We don't want any single numbers
+        //TODO not sure what more to do
+        removeIsolatedCells(grid)
+        
+        // 6. Return it
+        return grid
     }
     
     cell(x, y) {
@@ -123,6 +158,30 @@ class Grid {
         return this.#grid[index]
     }
     
+    /**
+     * Return the neighbours of the given cell
+     * 
+     * @param {Number} x 
+     * @param {Number} y 
+     * @returns {Array} An array of the cells perpendicular to the x,y cell.
+     */
+    neighbours(x, y) {
+        const neighbours = []
+        if (x - 1 >= 0) {
+            neighbours.push(this.cell(x - 1, y))
+        }
+        if (x + 1 < this.width) {
+            neighbours.push(this.cell(x + 1, y))
+        }
+        if (y - 1 >= 0) {
+            neighbours.push(this.cell(x, y - 1))
+        }
+        if (y + 1 < this.height) {
+            neighbours.push(this.cell(x, y + 1))
+        }
+        return neighbours
+    }
+
     toString() {
         const lines = []
         for (let y = 0; y < this.height; ++y) {
@@ -144,6 +203,10 @@ class Cell {
     constructor(content) {
         this.content = content
         this.revealed = false
+    }
+
+    fillable() {
+        return this.content !== "#"
     }
 
     toString() {

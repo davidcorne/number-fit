@@ -128,9 +128,31 @@ describe("Grid", function() {
                 content += testGrid.cell(x, y)
             }
         }
-        console.log(content)
         assert.isAtMost(occurances(content, "#"), 6)
         assert.isAtLeast(occurances(content, "#"), 3)
     })
-    
+    it("neighbours", function() {
+        // |9 # # 7 #|
+        // |7 8 6 4 9|
+        // |8 3 # 9 #|
+        // |2 1 # 9 #|
+        // |1 # 5 # #|
+
+        const grid = Grid.fromString("5,5,9##7#7864983#9#21#9#1#5##")
+        const neighbours0_0 = grid.neighbours(0, 0)
+        assert.lengthOf(neighbours0_0, 2)
+    })
+    it("removeIsolatedCells", function() {
+        const isolatedCells = gridModule.__get__("isolatedCells")
+        const removeIsolatedCells = gridModule.__get__("removeIsolatedCells")
+        // |2 1 # #|
+        // |1 # 5 #|
+        const grid = Grid.fromString("4,2,21##1#5#")
+        const isolated = isolatedCells(grid)
+        assert.strictEqual(isolated[0][0], 2)
+        assert.strictEqual(isolated[0][1], 1)
+        removeIsolatedCells(grid)
+        const newIsolated = isolatedCells(grid)
+        assert.isEmpty(newIsolated)
+    })
 })
