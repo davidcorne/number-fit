@@ -5,10 +5,10 @@ const chai = require('chai')
 const assert = chai.assert
 
 const gridModule = rewire("./grid.js")
+const occurances = gridModule.__get__("occurances")
 
 describe("Utilities", function() {
     it("occurances", function() {
-        const occurances = gridModule.__get__("occurances")
         const testCases = [
             [["a", "b", "c"], "a", 1],
             [["a", "b", "c"], "d", 0]
@@ -16,6 +16,53 @@ describe("Utilities", function() {
         for (let testCase of testCases) {
             assert.strictEqual(occurances(testCase[0], testCase[1]), testCase[2])
         }
+    })
+    it("randomInex", function() {
+        // Slightly dodgy test with no seed, but if we run it enough times we should get all possible results
+        const randomIndex = gridModule.__get__("randomIndex")
+        const results = {}
+        for (let i = 0; i < 5000; ++i) {
+            const index = randomIndex(15)
+            results[index] = 1
+        }
+        // Now check we have the numbers 0-14 in the results
+        assert.property(results, "0")
+        assert.property(results, "1")
+        assert.property(results, "2")
+        assert.property(results, "3")
+        assert.property(results, "4")
+        assert.property(results, "5")
+        assert.property(results, "6")
+        assert.property(results, "7")
+        assert.property(results, "8")
+        assert.property(results, "9")
+        assert.property(results, "10")
+        assert.property(results, "11")
+        assert.property(results, "12")
+        assert.property(results, "13")
+        assert.property(results, "14")
+    })
+    it("randomDigit", function() {
+        // Very similar to before, ensure that we've got all of the digits
+        const randomDigit = gridModule.__get__("randomDigit")
+        const results = {}
+        for (let i = 0; i < 5000; ++i) {
+            const index = randomDigit()
+            results[index] = 1
+        }
+        // Now check we have the numbers 0-9 in the results
+        assert.property(results, "0")
+        assert.property(results, "1")
+        assert.property(results, "2")
+        assert.property(results, "3")
+        assert.property(results, "4")
+        assert.property(results, "5")
+        assert.property(results, "6")
+        assert.property(results, "7")
+        assert.property(results, "8")
+        assert.property(results, "9")
+        // And no other numbers
+        assert.lengthOf(Object.values(results), 10)
     })
 })
 
@@ -74,6 +121,16 @@ describe("Grid", function() {
         const testGrid = Grid.random(3, 5)
         assert.strictEqual(testGrid.width, 3)
         assert.strictEqual(testGrid.height, 5)
+        // This should contain at most 6 blanks (40% of 15)
+        let content = ""
+        for (let y = 0; y < testGrid.height; ++y) {
+            for (let x = 0; x < testGrid.width; ++x) {
+                content += testGrid.cell(x, y)
+            }
+        }
+        console.log(content)
+        assert.isAtMost(occurances(content, "#"), 6)
+        assert.isAtLeast(occurances(content, "#"), 3)
     })
     
 })

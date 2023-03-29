@@ -14,6 +14,25 @@ const occurances = function(array, elementToFind) {
     return count
 }
 
+/**
+ * Return a random valid index given the length of an array
+ * 
+ * @param {Number} length The length of the array you want a random index for
+ * @returns {Number} A random number between [0, length-1]
+ */
+const randomIndex = function(length) {
+    return Math.floor(Math.random() * length)
+}
+
+/**
+ * Return a random digit, [0-9]
+ * 
+ * @returns {Number} A random digit between [0-9]
+ */
+const randomDigit = function() {
+    return randomIndex(10)
+}
+
 class Grid {
     #grid
 
@@ -74,6 +93,29 @@ class Grid {
 
         // 2. Fill it with 40% blank spaces
         const blanks = parseInt(total * 0.4)
+        while (occurances(contentArray, "#") < blanks) {
+            const index = randomIndex(total)
+            contentArray[index] = "#"
+        }
+
+        // 3. Move the spaces around so that the shape of the grid is right
+        //TODO not sure how to do this yet
+
+        // 4. Fill it with random numbers
+        for (let i = 0; i < total; ++i) {
+            if (contentArray[i] !== "#") {
+                contentArray[i] = randomDigit()
+            }
+        }
+        // 5. Create the grid and return it
+        const encodedString = [
+            width.toString(),
+            ",",
+            height.toString(),
+            ",",
+            contentArray.join("")
+        ]
+        return this.fromString(encodedString.join(""))
     }
     
     cell(x, y) {

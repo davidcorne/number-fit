@@ -20,17 +20,12 @@ function main() {
     
     const encodedGrid = lines.join("")
 
-    // const array = Array.from(encodedGrid)
-    // const map = {}
-    // for (c of array) {
-    //     map[c] = map[c] ? map[c] + 1 : 1
-    // }
-    // console.log(map)
-
     const grid1 = gridModule.Grid.fromString(encodedGrid)
-    console.log(grid1.toString())
+    // console.log(grid1.toString())
 
-    const grid2 = gridModule.Grid.random(width, height)
+    const grid2 = gridModule.Grid.random(5, 5)
+    console.log(grid2.toString())
+
 }
 
 main()
