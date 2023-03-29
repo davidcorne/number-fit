@@ -2,7 +2,7 @@
   "name": "number-fit",
   "version": "1.0.0",
   "description": "A repo for creating and displaying number-fit puzzles.",
-  "main": "index.js",
+  "main": "source/index.js",
   "scripts": {
     "test": "mocha source/utest.js"
   },
