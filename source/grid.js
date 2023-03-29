@@ -25,16 +25,19 @@ class Grid {
         const parser = /(?<width>[0-9]+),(?<height>[0-9]+),(?<content>[0-9#]+)/
         const match = encodedGrid.match(parser)
         if (!match) {
-            //TODO error
+            throw new Error(`Incorrectly formatted string ${encodedGrid}`)
         }
         const width = parseInt(match.groups.width)
         const height = parseInt(match.groups.height)
         const content = match.groups.content
+        if (content.length !== width * height) {
+            throw new Error(`Content length doesn't match parsed height and width. width: ${width}, height: ${height}, content.length: ${content.length},  content: ${content}`)
+        }
         const grid = new Grid(width, height)
         for (let index = 0; index < content.length; ++index) {
             const character = content[index]
             if (!character.match(/[0-9#]/)) {
-                //TODO error
+                throw new Error(`Incorrect character ${character} found at index ${index} of string ${encodedGrid}`)
             }
             grid.#grid[index] = new Cell(character)
         }
