@@ -4,8 +4,8 @@ const rewire = require("rewire")
 const chai = require('chai')
 const assert = chai.assert
 
-const gridModule = rewire("./grid.js")
-const occurances = gridModule.__get__("occurances")
+const boardModule = rewire("./board.js")
+const occurances = boardModule.__get__("occurances")
 
 describe("Utilities", function() {
     it("occurances", function() {
@@ -19,7 +19,7 @@ describe("Utilities", function() {
     })
     it("randomInex", function() {
         // Slightly dodgy test with no seed, but if we run it enough times we should get all possible results
-        const randomIndex = gridModule.__get__("randomIndex")
+        const randomIndex = boardModule.__get__("randomIndex")
         const results = {}
         for (let i = 0; i < 5000; ++i) {
             const index = randomIndex(15)
@@ -46,7 +46,7 @@ describe("Utilities", function() {
     })
     it("randomDigit", function() {
         // Very similar to before, ensure that we've got all of the digits
-        const randomDigit = gridModule.__get__("randomDigit")
+        const randomDigit = boardModule.__get__("randomDigit")
         const results = {}
         for (let i = 0; i < 5000; ++i) {
             const index = randomDigit()
@@ -69,7 +69,7 @@ describe("Utilities", function() {
 })
 
 describe("Grid", function() {
-    const Grid = gridModule.__get__("Grid")
+    const Grid = boardModule.__get__("Grid")
 
     it("Construct from string", function() {
         // This works with the grid
@@ -145,8 +145,8 @@ describe("Grid", function() {
         assert.lengthOf(neighbours0_0, 2)
     })
     it("removeIsolatedCells", function() {
-        const isolatedCells = gridModule.__get__("isolatedCells")
-        const removeIsolatedCells = gridModule.__get__("removeIsolatedCells")
+        const isolatedCells = boardModule.__get__("isolatedCells")
+        const removeIsolatedCells = boardModule.__get__("removeIsolatedCells")
         // |2 1 # #|
         // |1 # 5 #|
         const grid = Grid.fromString("4,2,21##1#5#")

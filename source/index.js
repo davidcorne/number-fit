@@ -1,4 +1,4 @@
-const gridModule = require("./grid")
+const board = require("./board")
 
 function main() {
     const lines = [
@@ -20,10 +20,10 @@ function main() {
     
     const encodedGrid = lines.join("")
 
-    const grid1 = gridModule.Grid.fromString(encodedGrid)
+    const grid1 = board.Grid.fromString(encodedGrid)
     // console.log(grid1.toString())
 
-    const grid2 = gridModule.Grid.random(5, 5)
+    const grid2 = board.Grid.random(5, 5)
     console.log(grid2.toString())
 
 }
