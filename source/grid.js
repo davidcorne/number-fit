@@ -33,6 +33,12 @@ const randomDigit = function() {
     return randomIndex(10)
 }
 
+/**
+ * Find and return any number cells which are surrounded by unfillable cells.
+ * 
+ * @param {Grid} grid The grid you are looking for isolated cells on.
+ * @returns {Cell[]} The Array of cells which are isolated. (may be empty)
+ */
 const isolatedCells = function(grid) {
     const cells = []
     for (let y = 0; y < grid.height; ++y) {

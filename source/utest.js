@@ -25,7 +25,7 @@ describe("Utilities", function() {
             const index = randomIndex(15)
             results[index] = 1
         }
-        // Now check we have the numbers 0-14 in the results
+        // Now check we have all of the numbers 0-14 in the results
         assert.property(results, "0")
         assert.property(results, "1")
         assert.property(results, "2")
@@ -41,6 +41,8 @@ describe("Utilities", function() {
         assert.property(results, "12")
         assert.property(results, "13")
         assert.property(results, "14")
+        // And no other numbers
+        assert.lengthOf(Object.values(results), 15)
     })
     it("randomDigit", function() {
         // Very similar to before, ensure that we've got all of the digits
