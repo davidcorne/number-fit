@@ -4,7 +4,8 @@
   "description": "A repo for creating and displaying number-fit puzzles.",
   "main": "source/index.js",
   "scripts": {
-    "test": "mocha source/utest.js"
+    "test": "mocha source/utest.js",
+    "test:watch": "mocha -w source/utest.js"
   },
   "author": "David Corne",
   "license": "MIT",
