@@ -145,16 +145,14 @@ describe("Grid", function() {
         assert.lengthOf(neighbours0_0, 2)
     })
     it("removeIsolatedCells", function() {
-        const isolatedCells = boardModule.__get__("isolatedCells")
-        const removeIsolatedCells = boardModule.__get__("removeIsolatedCells")
         // |2 1 # #|
         // |1 # 5 #|
         const grid = Grid.fromString("4,2,21##1#5#")
-        const isolated = isolatedCells(grid)
+        const isolated = grid.isolatedCells()
         assert.strictEqual(isolated[0][0], 2)
         assert.strictEqual(isolated[0][1], 1)
-        removeIsolatedCells(grid)
-        const newIsolated = isolatedCells(grid)
+        grid.removeIsolatedCells()
+        const newIsolated = grid.isolatedCells()
         assert.isEmpty(newIsolated)
     })
 })

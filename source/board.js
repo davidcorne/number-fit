@@ -33,42 +33,6 @@ const randomDigit = function() {
     return randomIndex(10)
 }
 
-/**
- * Find and return any number cells which are surrounded by unfillable cells.
- * 
- * @param {Grid} grid The grid you are looking for isolated cells on.
- * @returns {Cell[]} The Array of cells which are isolated. (may be empty)
- */
-const isolatedCells = function(grid) {
-    const cells = []
-    for (let y = 0; y < grid.height; ++y) {
-        for (let x = 0; x < grid.width; ++x) {
-            // Don't worry if we're not fillable
-            if (!grid.cell(x, y).fillable()) {
-                continue
-            }
-            const neighbours = grid.neighbours(x, y)
-            const isNotFillable = (cell) => {
-                return !cell.fillable()
-            }
-            if (neighbours.every(isNotFillable)) {
-                cells.push([x, y])
-            }
-        }
-    }
-    return cells
-}
-
-const removeIsolatedCells = function(grid) {
-    const isolated = isolatedCells(grid)
-    for (const cell of isolated) {
-        // Get the neighbours of the isolated cells, randomly change one of them to a digit
-        const neighbours = grid.neighbours(cell[0], cell[1])
-        const index = randomIndex(neighbours.length)
-        neighbours[index].content = randomDigit()
-    }
-}
-
 class Grid {
     #grid
 
@@ -153,7 +117,7 @@ class Grid {
         // 5. Move the spaces around so that the shape of the grid is right
         // 5.1 Remove any isolated numbers. We don't want any single numbers
         //TODO not sure what more to do
-        removeIsolatedCells(grid)
+        grid.removeIsolatedCells()
         
         // 6. Return it
         return grid
@@ -188,6 +152,41 @@ class Grid {
         return neighbours
     }
 
+    removeIsolatedCells() {
+        const isolated = this.isolatedCells()
+        for (const cell of isolated) {
+            // Get the neighbours of the isolated cells, randomly change one of them to a digit
+            const neighbours = this.neighbours(cell[0], cell[1])
+            const index = randomIndex(neighbours.length)
+            neighbours[index].content = randomDigit()
+        }
+    }
+
+    /**
+     * Find and return any number cells which are surrounded by unfillable cells.
+     * 
+     * @returns {Cell[]} The Array of cells which are isolated. (may be empty)
+     */
+    isolatedCells() {
+        const cells = []
+        for (let y = 0; y < this.height; ++y) {
+            for (let x = 0; x < this.width; ++x) {
+                // Don't worry if we're not fillable
+                if (!this.cell(x, y).fillable()) {
+                    continue
+                }
+                const neighbours = this.neighbours(x, y)
+                const isNotFillable = (cell) => {
+                    return !cell.fillable()
+                }
+                if (neighbours.every(isNotFillable)) {
+                    cells.push([x, y])
+                }
+            }
+        }
+        return cells
+    }
+
     toString() {
         const lines = []
         for (let y = 0; y < this.height; ++y) {
@@ -207,6 +206,9 @@ class Grid {
 
 class Cell {
     constructor(content) {
+        if (!content.match(/[0-9#]/)) {
+            throw new Error(`Unexpected cell contents: ${content}`)
+        }
         this.content = content
         this.revealed = false
     }
