@@ -18,7 +18,7 @@ function displayGrid(grid) {
     console.log("")
     console.log(maskedGrid)
     console.log("")
-    console.log(clues.toString())
+    console.log(clues.formatAsString())
 }
 
 function main() {
@@ -42,7 +42,7 @@ function main() {
     const encodedGrid = lines.join("")
 
     const grid1 = board.Grid.fromString(encodedGrid)
-    const grid2 = board.Grid.random(5, 5)
+    const grid2 = board.Grid.random(10, 8)
     displayGrid(grid2)
 }
 

@@ -327,6 +327,16 @@ class Clues {
         return this.#clues[clueLength]
     }
 
+    formatAsString() {
+        // I want to display each
+        const lines = ["{"]
+        for (const number of this.clueLengths()) {
+            lines.push(`  ${number}: ${this.#clues[number]}`)
+        }
+        lines.push("}")
+        return lines.join("\n")
+    }
+
     toString() {
         return JSON.stringify(this.#clues, null, 2)
     }
