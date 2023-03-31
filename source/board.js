@@ -326,6 +326,10 @@ class Clues {
     clues(clueLength) {
         return this.#clues[clueLength]
     }
+
+    toString() {
+        return JSON.stringify(this.#clues, null, 2)
+    }
 }
 
 class Cell {
