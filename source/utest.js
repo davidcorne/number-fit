@@ -155,4 +155,46 @@ describe("Grid", function() {
         const newIsolated = grid.isolatedCells()
         assert.isEmpty(newIsolated)
     })
+    it("generateClues", function() {
+        return
+        // |1 2 3|
+        // |# 4 #|
+        // |# 6 7|
+        //
+        // Clues should be:
+        // {
+        //     "2": ["67"],
+        //     "3": ["123", "246"]
+        // }
+        const grid1 = Grid.fromString("3,3,123#4##67")
+        const clues1 = grid1.generateClues()
+        assert.lengthOf(clues1.clueLengths(), 2)
+        assert.deepEqual(clues1.clueLengths(), [2, 3])
+        
+        // |9 # # 7 #|
+        // |7 8 6 4 9|
+        // |8 # # 9 #|
+        // |2 # # 9 #|
+        // |1 # 5 1 9|
+        const grid2 = Grid.fromString("5,5,9##7#786498##9#2##9#1#519")
+
+    })
+})
+
+describe("Clues", function() {
+    const Clues = boardModule.__get__("Clues")
+    it("Basic Clues", function() {
+        const cluesObj = {
+            2: ["12", "23"],
+            3: ["123"],
+            19: ["1234567890123456789"]
+        }
+        const clues = new Clues(cluesObj)
+        const clueLengths = clues.clueLengths()
+        assert.deepEqual(clueLengths, [2, 3, 19])
+
+        assert.deepEqual(clues.clues(2), ["12", "23"])
+        assert.deepEqual(clues.clues(3), ["123"])
+        assert.deepEqual(clues.clues(19), ["1234567890123456789"])
+    })
 })

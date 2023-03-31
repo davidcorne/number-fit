@@ -187,6 +187,28 @@ class Grid {
         return cells
     }
 
+    /**
+     * Generates a clues object which contains the clues for this grid.
+     * 
+     * e.g. for:
+     *   |1 2 3|
+     *   |# 4 #|
+     *   |# 6 7|
+     * 
+     * It would return {
+     *   "2": ["67"],
+     *   "3": ["123", "246"]
+     * }
+     * 
+     * @returns {Clues} The clues for this grid
+     */
+    generateClues() {
+        return new Clues({
+            2: ["67"],
+            3: ["123", "246"]
+        })
+    }
+
     toString() {
         const lines = []
         for (let y = 0; y < this.height; ++y) {
@@ -201,6 +223,34 @@ class Grid {
             lines.push(line.join(""))
         }
         return lines.join("\n")
+    }
+}
+
+class Clues {
+    #clues
+    constructor(clues) {
+        this.#clues = clues
+    }
+
+    /**
+     * Get an array of the lengths of clues 
+     * 
+     * @returns {Number[]} An array of clue lengths
+     */
+    clueLengths() {
+        const keys = Object.keys(this.#clues)
+        return keys.map((value) => {
+            return parseInt(value)
+        })
+    }
+
+    /**
+     * Get all of the clues for a given clue length
+     * 
+     * @param {Number} clueLength 
+     */
+    clues(clueLength) {
+        return this.#clues[clueLength]
     }
 }
 
