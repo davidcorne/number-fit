@@ -1,5 +1,26 @@
 const board = require("./board")
 
+function displayGrid(grid) {
+    const clues = grid.generateClues()
+    const gridString = grid.toString()
+    const maskedGrid = gridString.replace(/[0-9]/g, "\u25a1")
+    console.log(gridString)
+    console.log("")
+    console.log("")
+    console.log("")
+    console.log("")
+    console.log("")
+    console.log("")
+    console.log("")
+    console.log("")
+    console.log("")
+    console.log("")
+    console.log("")
+    console.log(maskedGrid)
+    console.log("")
+    console.log(clues.toString())
+}
+
 function main() {
     const lines = [
         "13,13,",
@@ -21,12 +42,8 @@ function main() {
     const encodedGrid = lines.join("")
 
     const grid1 = board.Grid.fromString(encodedGrid)
-    grid1.generateClues()
-    // console.log(grid1.toString())
-
     const grid2 = board.Grid.random(5, 5)
-    // console.log(grid2.toString())
-
+    displayGrid(grid2)
 }
 
 main()
