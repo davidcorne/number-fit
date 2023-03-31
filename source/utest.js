@@ -181,26 +181,25 @@ describe("Grid", function() {
         // Clues should be:
         // {
         //   3: ["519"]
-        //   5: ["78649", "97821", "74991"]
+        //   5: ["74991", "78649", "97821"]
         // }
         const grid2 = Grid.fromString("5,5,9##7#786498##9#2##9#1#519")
         const clues2 = grid2.generateClues()
         assert.lengthOf(clues2.clueLengths(), 2)
         assert.deepEqual(clues2.clueLengths(), [3, 5])
         assert.deepEqual(clues2.clues(3), ["519"])
-        assert.deepEqual(clues2.clues(5), ["78649", "97821", "74991"])
+        assert.deepEqual(clues2.clues(5), ["74991", "78649", "97821"])
     })
 })
 
 describe("Clues", function() {
     const Clues = boardModule.__get__("Clues")
     it("Basic Clues", function() {
-        const cluesObj = {
-            2: ["12", "23"],
-            3: ["123"],
-            19: ["1234567890123456789"]
-        }
-        const clues = new Clues(cluesObj)
+        const clues = new Clues()
+        clues.add("12")
+        clues.add("23")
+        clues.add("123")
+        clues.add("1234567890123456789")
         const clueLengths = clues.clueLengths()
         assert.deepEqual(clueLengths, [2, 3, 19])
 

@@ -263,7 +263,7 @@ class Grid {
             }
             return new Clues(clueObject)
         }
-        const clues = new Clues({})
+        const clues = new Clues()
         getClues(this.#rows(), clues)
         getClues(this.#columns(), clues)
         return clues
@@ -288,8 +288,8 @@ class Grid {
 
 class Clues {
     #clues
-    constructor(clues) {
-        this.#clues = clues
+    constructor() {
+        this.#clues = {}
     }
 
     /**
@@ -304,14 +304,20 @@ class Clues {
         })
     }
 
+    /**
+     * 
+     * @param {String} number A string representing a number
+     */
     add(number) {
         if (number.length > 1) {
             if (!this.#clues[number.length]) {
                 this.#clues[number.length] = []
             }
             this.#clues[number.length].push(number)
+            this.#clues[number.length].sort()
         }
     }
+
     /**
      * Get all of the clues for a given clue length
      * 
