@@ -156,7 +156,6 @@ describe("Grid", function() {
         assert.isEmpty(newIsolated)
     })
     it("generateClues", function() {
-        return
         // |1 2 3|
         // |# 4 #|
         // |# 6 7|
@@ -170,14 +169,26 @@ describe("Grid", function() {
         const clues1 = grid1.generateClues()
         assert.lengthOf(clues1.clueLengths(), 2)
         assert.deepEqual(clues1.clueLengths(), [2, 3])
+        assert.deepEqual(clues1.clues(2), ["67"])
+        assert.deepEqual(clues1.clues(3), ["123", "246"])
         
         // |9 # # 7 #|
         // |7 8 6 4 9|
         // |8 # # 9 #|
         // |2 # # 9 #|
         // |1 # 5 1 9|
+        //
+        // Clues should be:
+        // {
+        //   3: ["519"]
+        //   5: ["78649", "97821", "74991"]
+        // }
         const grid2 = Grid.fromString("5,5,9##7#786498##9#2##9#1#519")
-
+        const clues2 = grid2.generateClues()
+        assert.lengthOf(clues2.clueLengths(), 2)
+        assert.deepEqual(clues2.clueLengths(), [3, 5])
+        assert.deepEqual(clues2.clues(3), ["519"])
+        assert.deepEqual(clues2.clues(5), ["78649", "97821", "74991"])
     })
 })
 

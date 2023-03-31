@@ -188,6 +188,53 @@ class Grid {
     }
 
     /**
+     * Get the rows in the grid as an array of strings
+     * 
+     * e.g. for 
+     *   |1 2 3|
+     *   |# 4 #|
+     *   |# 6 7|
+     * 
+     * It would return:
+     *   ["123", "#4#", "#67"]
+     * 
+     * @returns {Cell[]} An array of the rows in the grid
+     */
+    #rows() {
+        const rows = []
+        for (let i = 0; i < this.height; ++i) {
+            const cellRow = this.#grid.slice(i * this.width, (i + 1) * this.width)
+            const row = cellRow.map(cell => {return cell.content}).join("")
+            rows.push(row)
+        }
+        return rows
+    }
+
+    /**
+     * Get the columns in the grid as an array of strings
+     * 
+     * e.g. for 
+     *   |1 2 3|
+     *   |# 4 #|
+     *   |# 6 7|
+     * 
+     * It would return:
+     *   ["1##", "246", "3#7"]
+     * 
+     * @returns {Cell[]} An array of the columns in the grid
+     */#columns() {
+        const columns = []
+        for (let i = 0; i < this.width; ++i) {
+            const column = []
+            for (let j = 0; j < this.height; ++j) {
+                column.push(this.#grid[i + j * this.width])
+            }
+            columns.push(column.join(""))
+        }
+        return columns
+    }
+
+    /**
      * Generates a clues object which contains the clues for this grid.
      * 
      * e.g. for:
@@ -203,10 +250,23 @@ class Grid {
      * @returns {Clues} The clues for this grid
      */
     generateClues() {
-        return new Clues({
-            2: ["67"],
-            3: ["123", "246"]
-        })
+        // Go through the grid horizontally and vertically getting strings of numbers.
+        const getClues = function(tuple, clues) {
+            const clueObject = {}
+            for (const items of tuple) {
+                const numbers = items.split("#")
+                for (const number of numbers) {
+                    if (number && number.length > 1) {
+                        clues.add(number)
+                    }
+                }
+            }
+            return new Clues(clueObject)
+        }
+        const clues = new Clues({})
+        getClues(this.#rows(), clues)
+        getClues(this.#columns(), clues)
+        return clues
     }
 
     toString() {
@@ -244,6 +304,14 @@ class Clues {
         })
     }
 
+    add(number) {
+        if (number.length > 1) {
+            if (!this.#clues[number.length]) {
+                this.#clues[number.length] = []
+            }
+            this.#clues[number.length].push(number)
+        }
+    }
     /**
      * Get all of the clues for a given clue length
      * 

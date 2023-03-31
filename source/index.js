@@ -21,10 +21,11 @@ function main() {
     const encodedGrid = lines.join("")
 
     const grid1 = board.Grid.fromString(encodedGrid)
+    grid1.generateClues()
     // console.log(grid1.toString())
 
     const grid2 = board.Grid.random(5, 5)
-    console.log(grid2.toString())
+    // console.log(grid2.toString())
 
 }
 
